@@ -1,0 +1,43 @@
+#auth-container
+{
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	justify-content: center;
+	width: 612px;
+	text-align: center;
+}
+
+button
+{
+	border: none;
+}
+
+.auth-input
+{
+	width: 502px;
+	height: 67px;
+	border-radius: 12px;
+	margin: 20px 0px;
+	padding: 0px 20px;
+	font-size: 24px;
+	border: 1px solid #343434;
+}
+
+.auth-input:focus
+{
+	outline: none;
+	border-color: #e06149;
+}
+
+.auth-button
+{
+	padding: 13px 26px;
+	text-align: center;
+	margin: 10px;
+	font-size: 20px;
+	border-radius: 7px;
+	cursor: pointer;
+	color: #ffffff;
+	background-color: #e06149;
+}
