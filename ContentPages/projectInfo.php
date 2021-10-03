@@ -2,8 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8"/>
-	<meta name="description" content="WebCode - Научитесь создавать динамичные сайты с нуля!"/>
-	<meta name="keywords" content="Программирование учить, Как создать сайт, Php, html, javascript, css"/>
+	<meta name="description" content="WebCode - информация о проекте."/>
 	<meta name="author" content="Ruslan Lyaschenko"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 	<link rel="stylesheet" type="text/css" href="../Styles/defaultStyle.css"/>
@@ -15,26 +14,12 @@
 	<title>WebCode | О проекте/Контакты</title>
 </head>
 <body>
-	<header class="wrapper dark-botton-border">
-		<div class="container">
-			<div class="logo-wrap">
-				<a href="../index.html"><img src="../Logo/name.png" title="WebCode" alt="WebCode"/></a>
-			</div>
-			<nav class="menu">
-				<ul>
-					<a class="title-link opacity-effect" href="#">HTML</li></a>
-					<a class="title-link opacity-effect" href="#">PHP</li></a>
-					<a class="title-link opacity-effect" href="#">CSS</li></a>
-				</ul>
-			</nav>
-			<div id="auth">
-				<a class="white-button dark-button-effect" href="../UserPages/LogIn.html">Войти</a>
-				<a class="red-button purple-button-effect" href="../UserPages/SignUp.html">
-					Регистрация
-				</a>
-			</div>
-		</div>
-	</header>
+
+	<?php
+		require_once($_SERVER['DOCUMENT_ROOT'] . '/ServerUtils/dataBase.php');
+		require_once($_SERVER['DOCUMENT_ROOT'] . '/ServerUtils/header.php');
+	?>
+
 	<div id="caption">
 		<span>Информация</span>
 	</div>
@@ -43,7 +28,7 @@
 		<div id="inline-global-container">
 			<div id="content-wrapper">
 				<h1>О проекте/Контакты</h1>
-				<p><strong><a class="light-red underline-effect" href="../index.html">WebCode.com</a></strong> — это онлайн-ресурс о web-программировании для начинающих и более продвинутых пользователей.</p>
+				<p><strong><a class="light-red underline-effect" href="../index.php">WebCode.com</a></strong> — это онлайн-ресурс о web-программировании для начинающих и более продвинутых пользователей.</p>
 				<p class="info-text"><i class="fas fa-rocket fa-lg light-red"></i> Запущен в 2021 году.</p>
 				<p class="info-text"><i class="fab fa-earlybirds fa-lg light-red"></i> Цель: Сделать ресурс, на котором человек, изучая уроки, с нуля сможет создать web-сайт.</p>
 				<p class="info-text"><i class="fas fa-laptop-code fa-lg light-red"></i> Тематика: Программирование/ИТ.</p>
@@ -68,33 +53,6 @@
 			</div>
 		</div>
 	</div>
-	<footer class="wrapper dark-top-border">
-		<div class="container">
-			<div class="logo-wrap">
-				<a href="../index.html">
-					<img src="../Logo/name.png" title="WebCode" alt="WebCode"/>
-				</a>
-				© Copyright <script>document.write(new Date().getFullYear())</script>
-			</div>
-			<div class="footer-content-container">
-				<p class="heading-footer">Информация</p>
-				<a class="light-gray underline-effect" href="#"><p>О проекте/Контакты</p></a>
-				<a class="light-gray underline-effect" href="#"><p>Все статьи</p></a>
-				<a class="light-gray underline-effect" href="mailto:ruslan.itpro@gmail.com"><p>ruslan.itpro@gmail.com</p></a>
-			</div>
-			<div class="footer-content-container">
-				<p class="heading-footer">Аккаунт</p>
-				<a class="light-gray underline-effect" href="../UserPages/LogIn.html"><p>Войти</p></a>
-				<a class="light-gray underline-effect" href="../UserPages/SignUp.html"><p>Регистрация</p></a>
-			</div>
-		</div>
-		<div>
-			<a href="https://vk.com/ruslan.itpro" target="_blank" title="VK"><i class="fab fa-vk social-button"></i></a>
-			<a href="#" target="_blank" title="Facebook"><i class="fab fa-facebook social-button"></i></a>
-			<a href="#" target="_blank" title="YouTube"><i class="fab fa-youtube social-button"></i></a>
-			<a href="#" target="_blank" title="Twitter"><i class="fab fa-twitter social-button"></i></a>
-			<a href="#" target="_blank" title="Instagram"><i class="fab fa-instagram social-button"></i></a>
-		</div>
-	</footer>
+	<?php require_once($_SERVER['DOCUMENT_ROOT'] . '/ServerUtils/footer.php'); ?>
 </body>
 </html>

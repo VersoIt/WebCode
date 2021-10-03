@@ -13,6 +13,15 @@ button
 	border: none;
 }
 
+#auth-wrapper
+{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	height: 100%;
+}
+
 .auth-input
 {
 	width: 502px;
