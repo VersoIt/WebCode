@@ -2,11 +2,10 @@
 	require_once($_SERVER['DOCUMENT_ROOT'] . '/ServerUtils/dataBase.php');
 	require_once($_SERVER['DOCUMENT_ROOT'] . '/ServerUtils/dataSendler.php');
 
-	setlocale(LC_ALL, 'ru_RU', 'ru_RU.UTF-8', 'ru', 'russian');
-	date_default_timezone_set('UTC');
-
 	$logged_user = R::findOne('users', 'id = ?', array($_SESSION['logged_user']->id));
-	if ($logged_user) R::exec('UPDATE `users` SET `last_online`=NOW() WHERE `id` = ' . $logged_user->id);
+	if ($logged_user) R::exec('UPDATE `users` SET `last_online`= NOW() WHERE `id` = ' . $logged_user->id);
+
+	$subjects = R::getCol('SELECT DISTINCT `subject` FROM `articles`');
 
 	echo '<header class="wrapper dark-botton-border">
 		<div class="container">
@@ -14,11 +13,13 @@
 				<a href="/index.php"><img src="/Logo/name.png" title="WebCode" alt="WebCode"/></a>
 			</div>
 			<nav class="menu">
-				<ol>
-					<a class="title-link opacity-effect" href="#">HTML</li></a>
-					<a class="title-link opacity-effect" href="#">PHP</li></a>
-					<a class="title-link opacity-effect" href="#">CSS</li></a>
-				</ol>
+				<ol>';
+	foreach($subjects as $subject)
+	{
+		echo '<a class="title-link opacity-effect" href="/ContentPages/allArticles.php#' . $subject . '">' . $subject . '</li></a>';
+	}
+				
+	echo 	'</ol>
 			</nav>
 			<div id="auth">';
 

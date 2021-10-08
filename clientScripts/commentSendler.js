@@ -2,7 +2,9 @@ const
   contentInput = document.querySelector('#comment-input'),
   sendButton = document.querySelector('#send-comment-button');
 
-contentInput.addEventListener('input', function() {
+if (contentInput)
+{
+  contentInput.addEventListener('input', function() {
   if (!this.value)
     {
       $(sendButton).css("background-color", "#8e8e8e");
@@ -16,3 +18,4 @@ contentInput.addEventListener('input', function() {
     $(sendButton).removeAttr("disabled");
   }
 });
+}

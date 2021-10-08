@@ -1,6 +1,8 @@
 <?php
 	require_once($_SERVER['DOCUMENT_ROOT'] . '/ServerUtils/dataBase.php');
 
+	setlocale(LC_ALL, 'ru_RU', 'ru_RU.UTF-8', 'ru', 'russian');
+
 	class Data
 	{
 		public static function sendUserData($data)
@@ -11,6 +13,8 @@
 			$user->email = mb_strtolower($data['email']);
 			$user->password = password_hash($data['password'], PASSWORD_DEFAULT);
 			$user->ip = $_SERVER['REMOTE_ADDR'];
+			$user->icon = '/Images/Users/unknown.png';
+			$user->last_online = date('d M Y H:i');
 			$user->is_admin = false;
 		
 			R::store($user);
@@ -29,16 +33,16 @@
 			$article->description = $data['description'];
 			$article->date = date('d M Y H:i');
 			$article->owner_id = $_SESSION['logged_user']->id;
-			Data::sendIcon($article);
 
+			Data::sendIcon($article, '/Images/Articles/');
 			R::store($article);
 		}
 
-		public static function sendIcon(&$bean)
+		public static function sendIcon(&$bean, $folder)
 		{
-			$path = $_SERVER['DOCUMENT_ROOT'] . '/Images/Articles/' . $_FILES['icon']['name'];
-			if (move_uploaded_file($_FILES['icon']['tmp_name'], $path)) $bean->icon = '/Images/Articles/' . $_FILES['icon']['name'];
-			else $bean->icon = '/Images/Articles/unknown.jpg';
+			$path = $_SERVER['DOCUMENT_ROOT'] . $folder . $_FILES['icon']['name'];
+			if (move_uploaded_file($_FILES['icon']['tmp_name'], $path)) $bean->icon = $folder . $_FILES['icon']['name'];
+			else $bean->icon = $folder . 'unknown.jpg';
 		}
 
 		public static function sendCommentData($data)

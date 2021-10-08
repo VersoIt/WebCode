@@ -89,7 +89,7 @@ input[type="text"]
 .avatar img
 {
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     object-position: center center;
 }
 
@@ -106,11 +106,6 @@ input[type="text"]
 	padding: 7px 10px;
 	border-bottom: 1px solid #ccc;
 	width: 100%;
-}
-
-#send-comment-button
-{
-
 }
 
 #comment-input ~ .focus-border

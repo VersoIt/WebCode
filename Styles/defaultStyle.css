@@ -21,6 +21,18 @@ html, body
 	color: #343434;
 }
 
+.article-subject
+{
+	font-size: 32px;
+	float: left;
+	margin: 10px 0px 10px 0px;
+}
+
+.pointer
+{
+	cursor: pointer;
+}
+
 #middle-wrapper
 {
 	display: flex;

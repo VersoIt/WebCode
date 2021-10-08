@@ -18,6 +18,7 @@
 	<link rel="shortcut icon" type="image/x-icon" href="../Logo/icon.ico"/>
 	<script src="https://kit.fontawesome.com/28c4ac0753.js" crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="/ClientScripts/imageLoader.js"></script>
 	<title>WebCode | Редактор статей</title>
 </head>
 <body>
@@ -34,9 +35,9 @@
 					<form id="auth-container" style="width:100%" action="<?php echo $_SERVER['PHP_SELF']?>" method="POST" enctype="multipart/form-data">
 						<label class="light-red" for="title">Название статьи</label>
 						<input type="text" class="auth-input" name="title" placeholder="Ваше название..." value="<?php echo @$data['title']; ?>" maxlength="28"/>
-						<label for="file-upload" id="bntUpload" class="red-button purple-button-effect"><i class="fa fa-cloud-upload"></i> Загрузить картинку (600x448)</label>
+						<label for="file-upload" id="bntUpload" class="red-button purple-button-effect pointer"><i class="fa fa-cloud-upload"></i> Загрузить картинку (600x448)</label>
 						<input id="input_file" type="file" accept="image/x-png,image/gif,image/jpeg" name="icon"/>
-						<span id="selected_filename" class="light-gray">Файл не выбран</span>
+						<span id="selected_filename" class="light-gray unselectable">Файл не выбран</span>
 						<label class="light-red" for="content">Текст статьи</label>
 						<textarea id="article-content-input" placeholder="Ваш текст..." name="content" maxlength="65536"><?php echo @$data['content']; ?></textarea>
 						<label class="light-red" for="description">Описание статьи</label>
@@ -44,9 +45,7 @@
 						<label class="light-red" for="title">Тематика</label>
 						<input type="text" class="auth-input" name="subject" placeholder="ЯП, о котором вы будете писать..." value="<?php echo @$data['subject']; ?>" maxlength="64"/>
 						<?php
-							if (empty($errors) && !empty($data)) {
-								Data::sendArticleData($data); 
-							}
+							if (empty($errors) && !empty($data)) Data::sendArticleData($data); 
 							else echo '<p class="light-red">' . array_shift($errors) . '</p>';
 						?>
 						<button type="submit" class="auth-button red-shadow purple-button-effect" name="accept">Опубликовать статью</button>
@@ -57,18 +56,5 @@
 	</div>
 <?php require_once($_SERVER['DOCUMENT_ROOT'] . '/ServerUtils/footer.php'); ?>
 </body>
-
-<script>
-	$(document).ready( function() {
-    $('#bntUpload').click(function(){
-        $("#input_file").click();
-    });
-     
-    $('#input_file').change(function() {
-        $('#selected_filename').text("Загружено: " + $('#input_file')[0].files[0].name);
-    });
-
-});
-</script>
 
 <?php endif; ?>

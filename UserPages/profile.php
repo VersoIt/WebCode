@@ -20,6 +20,8 @@
 	<link rel="shortcut icon" type="image/x-icon" href="../Logo/icon.ico"/>
 	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet"/>
 	<script src="https://kit.fontawesome.com/28c4ac0753.js" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="/ClientScripts/imageLoader.js"></script>
 	<title>WebCode | <?php echo Data::get_userName($user); ?> </title>
 </head>
 <body>
@@ -29,7 +31,8 @@
 	</div>
 	<div id="global-container">
 		<div id="middle-wrapper">
-			<div id="user-info">
+			<div id="profile">
+				<div class="floating-head dark-gray unselectable">Профиль</div>
 				<div id="user-name">
 					<span class="heading-title user-name"><span class="dark-gray">
 						<?php 
@@ -37,22 +40,32 @@
 							else echo 'Логин: '; ?>
 							</span><span class="light-red">
 						<?php echo Data::get_userName($user); ?>
-						</span></span>
+						</span>
+					</span>
 				</div>
 				<div class="user-components">
 					<div id="avatar">
-						<img src="/Logo/icon.png" title="<?php echo Data::get_userName($user); ?>" alt="<?php echo Data::get_userName($user) ?>"/>
+						<img src="<?php echo $user->icon; ?>" title="<?php echo Data::get_userName($user); ?>" alt="<?php echo Data::get_userName($user) ?>"/>
 					</div>
+					<?php if($user['id'] == $_SESSION['logged_user']->id): ?>
+						<form id="auth-container" style="width:100%" action="<?php echo '/ServerUtils/avatarSendler.php'; ?>" method="POST" enctype="multipart/form-data">
+							<label for="file-upload" id="bntUpload" class="red-button purple-button-effect pointer"><i class="fa fa-cloud-upload"></i> Загрузить аватар</label>
+							<input id="input_file" type="file" accept="image/x-png,image/gif,image/jpeg" name="icon" onchange="this.form.submit();"/>
+							<span id="selected_filename" class="light-gray unselectable">Файл не выбран</span>
+						</form>
+					<?php endif; ?>
 					<?php if($user): ?>
 					<div id="statistics">
 						<p>Рейтинг: (В разработке)</p>
 						<p>Всего комментариев: <?php echo sizeof($comments) ?> </p>
-						<p>Был(а) в сети <?php echo gmdate("d M Y г. в h:i", strtotime($user->last_online)); ?></p>
+						<p>Был(а) в сети <?php echo gmdate("d M Y г. в H:i", strtotime($user->last_online) + 10800); ?></p>
 					</div>
 					<?php endif; ?>
 				</div>
+				<div class="circle" style="bottom: -260px;left: -140px;"></div>
+				<div class="circle" style="top: -260px;right: -140px;"></div>
 			</div>
-			<?php if (!$user) echo '<p class="light-red">Такой профиль больше не существует.</p>'; ?>
+			<?php if (!$user) echo '<p class="light-red">Такой профиль не существует.</p>'; ?>
 		</div>
 	</div>
 	<?php require_once($_SERVER['DOCUMENT_ROOT'] . '/ServerUtils/footer.php'); ?>

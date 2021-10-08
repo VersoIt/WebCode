@@ -24,31 +24,35 @@
 		<div id="inline-global-container">
 			<div id="content-wrapper">
 				<?php 
-					$articles = R::findAll('articles');
-					if ($articles == null) echo '<h1 class="light-gray main-heading unselectable">Здесь пока ничего нет...</h1>';
+					if ($subjects == null) echo '<h1 class="light-gray main-heading unselectable">Здесь пока ничего нет...</h1>';
 					else
 					{
-						foreach($articles as $article)
+						foreach ($subjects as $subject)
 						{
-							$owner = R::findOne('users', 'id = ?', array($article['owner_id']));
+							$articles = R::find('articles', 'subject = ?', array($subject));
+							echo '<a name="' . $subject . '"><span class="dark-gray article-subject" style="width:100%;float:left"><i class="fas fa-check-circle"></i> ' . $subject . '</span></a>';
+							foreach($articles as $article)
+							{
+								$owner = R::findOne('users', 'id = ?', array($article['owner_id']));
 
-							echo '<article class="single-announcement shadow">
-								<a class="image-announcement scale-effect" href="/ContentPages/article.php?id=' . $article['id'] . '">
-									<img src="' . $article['icon'] . '" title="' . $article['subject'] . ': ' . $article['title'] . '" alt="' . $article['subject'] . ': ' . $article['title'] . '"/>
-								</a>
-								<section class="content-announcement">
-									<a class="title-announcement" href="/ContentPages/article.php?id=' . $article['id'] . '"><h2 class="dark-gray">' . $article['subject'] . ': ' . $article['title'] . '</h2></a><p class="dark-gray">' . $article['description'] . '</p>
-									<div class="author-date-wrap">
-										<span class = "statistics-element"><a href="/UserPages/profile.php?id=' . $article->owner_id . '" title="Создатель статьи"><i class="fa fa-user" aria-hidden="true"></i> ' . Data::get_userName($owner) . '</a></span>
-										<span class = "statistics-element"><i class="fa fa-pen-nib" aria-hidden="true"></i> ' . $article['date'] . '</span>
-									</div>
-									<div class="views-comments-wrap">
-										<span class = "statistics-element"><i class="fa fa-eye" aria-hidden="true"></i> ' . number_format(intval($article['views']), 0, ' ', ' ') . '</span>
-										<span class = "statistics-element"><i class="fa fa-comments" aria-hidden="true"></i> ' . $article['comments_count'] . '</span>
-									</div>
-								</section>
-								' . ((time() - strtotime($article['date'])) / 86400 > 7 ? '' : '<span class="frame-text">NEW</span>' ) . '
-							</article>';
+								echo '<article class="single-announcement shadow" style="width:91%;float:right">
+									<a class="image-announcement scale-effect" href="/ContentPages/article.php?id=' . $article['id'] . '">
+										<img src="' . $article['icon'] . '" title="' . $article['subject'] . ': ' . $article['title'] . '" alt="' . $article['subject'] . ': ' . $article['title'] . '"/>
+									</a>
+									<section class="content-announcement">
+										<a class="title-announcement" href="/ContentPages/article.php?id=' . $article['id'] . '"><h2 class="dark-gray">' . $article['subject'] . ': ' . $article['title'] . '</h2></a><p class="dark-gray">' . $article['description'] . '</p>
+										<div class="author-date-wrap">
+											<span class = "statistics-element"><a href="/UserPages/profile.php?id=' . $article->owner_id . '" title="Создатель статьи"><i class="fa fa-user" aria-hidden="true"></i> ' . Data::get_userName($owner) . '</a></span>
+											<span class = "statistics-element"><i class="fa fa-pen-nib" aria-hidden="true"></i> ' . $article['date'] . '</span>
+										</div>
+										<div class="views-comments-wrap">
+											<span class = "statistics-element"><i class="fa fa-eye" aria-hidden="true"></i> ' . number_format(intval($article['views']), 0, ' ', ' ') . '</span>
+											<span class = "statistics-element"><i class="fa fa-comments" aria-hidden="true"></i> ' . $article['comments_count'] . '</span>
+										</div>
+									</section>
+									' . ((time() - strtotime($article['date'])) / 86400 > 7 ? '' : '<span class="frame-text">NEW</span>' ) . '
+								</article>';
+							}
 						}
 					}
 				 ?>
