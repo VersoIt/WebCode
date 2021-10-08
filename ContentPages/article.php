@@ -24,10 +24,27 @@
 	<script src="https://kit.fontawesome.com/28c4ac0753.js" crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
 	<title>WebCode | <?php echo $article != null ? $article['subject'] . ': ' . $article['title'] : 'Страница не найдена!'?></title>
-	<script src="../clientScripts/contentHeading.js"></script>
+	<script src="../ClientScripts/contentHeading.js"></script>
 </head>
 <body>
 	<?php require_once($_SERVER['DOCUMENT_ROOT'] . '/ServerUtils/header.php'); ?>
+
+	<?php
+		if(isset($_POST['send_comment']))
+		{
+
+			require_once($_SERVER['DOCUMENT_ROOT'] . '/ServerUtils/dataSendler.php');
+
+			$data = $_POST;
+			$data['owner_id'] = $_SESSION['logged_user']->id;
+			$data['article_id'] = $article['id'];
+
+			R::exec('UPDATE `articles` SET `comments_count` = `comments_count` + 1 WHERE `id` = ' . $article['id']);
+
+			Data::sendCommentData($data);
+			header('Location: ' . $_SERVER['PHP_SELF'] . '?id=' . $article['id']);
+		}
+	?>
 
 	<div id="global-container">
 		<?php if($article != null): ?>
@@ -35,8 +52,8 @@
 			<div id="content-wrapper">
 				<?php
 					echo '<h1>' . $article['title'] . '</h1>';
-					$owner_name = R::findOne('users', 'id = ?', array($article->owner_id))->login;
-					echo '<div><span class = "statistics-element"><a href="#" class="light-gray" title="Автор статьи"><i class="fa fa-user" aria-hidden="true"></i> ' . $owner_name . '</a> |</span><span class = "statistics-element"><i class="fa fa-pen-nib" aria-hidden="true"></i> ' . $article['date'] . ' |</span><span class = "statistics-element"><i class="fa fa-eye" aria-hidden="true"></i> ' . $article['views'] . ' |</span><span class = "statistics-element"><i class="fa fa-comments" aria-hidden="true"></i> ' . $article['comments'] . '</span>
+					$owner = R::findOne('users', 'id = ?', array($article->owner_id));
+					echo '<div><span class = "statistics-element"><a href="http://localhost/UserPages/profile.php?id=' . $article->owner_id . '" class="light-gray" title="Автор статьи"><i class="fa fa-user" aria-hidden="true"></i> ' . Data::get_userName($owner) . '</a> |</span><span class = "statistics-element"><i class="fa fa-pen-nib" aria-hidden="true"></i> ' . $article['date'] . ' |</span><span class = "statistics-element"><i class="fa fa-eye" aria-hidden="true"></i> ' . number_format(intval($article['views'] + 1), 0, ' ', ' ') . ' |</span><span class = "statistics-element"><i class="fa fa-comments" aria-hidden="true"></i> ' . $article['comments_count'] . '</span>
 						</div>';
 				?>
 				<div id="table-contents">
@@ -46,44 +63,51 @@
 					</ol>
 				</div>
 				<?php echo '<div id="content">' . $article['content'] . '</div>'; ?>
-				<input type="text" id="comment-input" placeholder="Оставьте комментарий" />
-				<div></div>
+				<form action="<?php echo $_SERVER['PHP_SELF'] . '?id=' . $article['id'];?>" class="comment-input-container" method="POST">
+					<div class="avatar main-image">
+						<img src="/Images/Articles/unknown.jpg" title="" alt=""/>
+					</div>
+					<div id="comment-input-wrapper">
+						<div style="position: relative; display: inline-block; width:80%;" >
+							<input type="text" id="comment-input" placeholder="Оставьте комментарий" name="content" autocomplete="off" />
+							<span class="focus-border"></span>
+						</div>
+						<div id="input-field">
+							<input type="submit" id="send-comment-button" class="red-button purple-button-effect" value="ОТПРАВИТЬ" name="send_comment" style="background-color: #8e8e8e;" disabled/>
+						</div>
+					</div>
+				</form>
 				<div id="comments">
-					<div class="comment">
-						<img src="/Images/Articles/unknown.jpg" alt="" title=""/>
-						<span class="trigger"><i class="fas fa-angle-double-down"></i></span>
-						<bdi class="owner underline-effect">Руслан</bdi>
-						<span class="light-gray">07 apr 2021 12:21:32</span>
-						<p class="comment-content">Мой комментарийМой комментарийМой коммМой комментарийМой комментарийМой комментарийМой комментарийМой комментарийМой комментарийМой комментарийМой комментарийМой комментарийМ</p>
-						<span class="comment-count light-gray">#1</span>
-					</div>
-					<div class="comment">
-						<img src="/Images/Articles/unknown.jpg" alt="" title=""/>
-						<span class="trigger"><i class="fas fa-angle-double-down"></i></span>
-						<bdi class="owner underline-effect">Руслан</bdi>
-						<span class="light-gray">07 apr 2021 12:21:32</span>
-						<p class="comment-content">Мой комментарийМой комментарийМой коммМой комментарийМой комментарийМой комментарийМой комментарийМой комментарийМой комментарийМой комментарийМой комментарийМой комментарийМ</p>
-						<span class="comment-count light-gray">#1</span>
-					</div>
-					<div class="comment">
-						<img src="/Images/Articles/unknown.jpg" alt="" title=""/>
-						<span class="trigger"><i class="fas fa-angle-double-down"></i></span>
-						<bdi class="owner underline-effect">Руслан</bdi>
-						<span class="light-gray">07 apr 2021 12:21:32</span>
-						<p class="comment-content">Мой комментарийМой комментарийМой коммМой комментарийМой комментарийМой комментарийМой комментарийМой комментарийМой комментарийМой комментарийМой комментарийМой комментарийМ</p>
-						<span class="comment-count light-gray">#1</span>
-					</div>
+
+					<?php 
+						$comments = R::find('comments', 'article_id = ?', array($article->id));
+						$comments = array_reverse($comments);
+						$count = 1;
+
+						if(empty($comments)) echo '<p class="light-gray main-heading unselectable">Будьте первым, кто оставит здесь комментарий.</p>';
+						else
+						{		
+							foreach($comments as $comment)
+							{
+								$owner = R::findOne('users', 'id = ?', array($comment['owner_id']));
+								echo '<div class="comment">
+										<div class="avatar comment-image">
+											<img src="/Images/Articles/unknown.jpg" alt="' . $owner->login . '" title="' . $owner->login . '"/>
+										</div>
+										<span class="trigger"><i class="fas fa-angle-double-down"></i></span>
+										<a href="/UserPages/profile.php?id=' . $article['owner_id'] . '" class="owner underline-effect">' . $owner->login . '</a>
+										<span class="light-gray">' . $comment['date'] . '</span>
+										<p class="comment-content">' . $comment['content'] . '</p>
+										<span class="comment-count light-gray">#' . $count . '</span>
+						    			</div>';
+						    	++$count;
+							}
+						}
+					?>
+
 				</div>
 			</div>
-			<div id="sidebar-wrapper">
-				<a class="out-button shadow purple-button-effect" href="https://vk.com/ruslan.itpro" target="_blank">Паблик <i class="fa fa-vk"></i></a>
-				<div class="out-button shadow" href="#">Топ статьи <i class="fa fa-fire-alt"></i></div>
-				<ul id="top-list">
-					<li><a class="top-page" href="#"><i class="fa fa-fire-alt"></i> Введение в PHP <i class="fa fa-eye" aria-hidden="true"></i> 12</a></li>
-					<li><a class="top-page" href="#"><i class="fa fa-fire-alt"></i> Введение в CSS <i class="fa fa-eye" aria-hidden="true"></i> 7</a></li>
-					<li><a class="top-page" href="#"><i class="fa fa-fire-alt"></i> Ссылки в HTML <i class="fa fa-eye" aria-hidden="true"></i> 6</a></li>
-				</ul>
-			</div>
+			<?php require_once($_SERVER['DOCUMENT_ROOT'] . '/ServerUtils/topArticles.php'); ?>
 		</div>
 <?php else: ?>
 		<div id="error-container">
@@ -97,5 +121,6 @@
 		</div>
 <?php endif ?>
 	</div>
+<script src="../ClientScripts/commentSendler.js"></script>
 <?php require_once($_SERVER['DOCUMENT_ROOT'] . '/ServerUtils/footer.php'); ?>
 </body>

@@ -27,7 +27,7 @@
 			$article->content = $data['content'];
 			$article->subject = strtoupper($data['subject']);
 			$article->description = $data['description'];
-			$article->date = date('d M Y H:i:s');
+			$article->date = date('d M Y H:i');
 			$article->owner_id = $_SESSION['logged_user']->id;
 			Data::sendIcon($article);
 
@@ -40,5 +40,24 @@
 			if (move_uploaded_file($_FILES['icon']['tmp_name'], $path)) $bean->icon = '/Images/Articles/' . $_FILES['icon']['name'];
 			else $bean->icon = '/Images/Articles/unknown.jpg';
 		}
+
+		public static function sendCommentData($data)
+		{
+			$comment = R::dispense('comments');
+
+			$comment->content = $data['content'];
+			$comment->owner_id = $data['owner_id'];
+			$comment->date = date('d M Y H:i');
+			$comment->article_id = $data['article_id'];
+
+			R::store($comment);
+		}
+
+		public static function get_userName($user)
+		{
+			if (!$user) return 'DELETED';
+			else return $user->login;
+		}
+
 	}
 ?>

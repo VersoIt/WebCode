@@ -38,11 +38,11 @@
 						<input id="input_file" type="file" accept="image/x-png,image/gif,image/jpeg" name="icon"/>
 						<span id="selected_filename" class="light-gray">Файл не выбран</span>
 						<label class="light-red" for="content">Текст статьи</label>
-						<textarea id="article-content-input" placeholder="Ваш текст..." name="content" maxlength="2048"><?php echo @$data['content']; ?></textarea>
+						<textarea id="article-content-input" placeholder="Ваш текст..." name="content" maxlength="65536"><?php echo @$data['content']; ?></textarea>
 						<label class="light-red" for="description">Описание статьи</label>
 						<textarea id="article-description-input" placeholder="Ваше описание..." name="description" maxlength="256"><?php echo @$data['description']; ?></textarea>
 						<label class="light-red" for="title">Тематика</label>
-						<input type="text" class="auth-input" name="subject" placeholder="ЯП, о котором вы будете писать..." style="text-align:center;" value="<?php echo @$data['subject']; ?>" maxlength="64"/>
+						<input type="text" class="auth-input" name="subject" placeholder="ЯП, о котором вы будете писать..." value="<?php echo @$data['subject']; ?>" maxlength="64"/>
 						<?php
 							if (empty($errors) && !empty($data)) {
 								Data::sendArticleData($data); 

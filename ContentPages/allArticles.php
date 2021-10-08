@@ -25,44 +25,35 @@
 			<div id="content-wrapper">
 				<?php 
 					$articles = R::findAll('articles');
-					if ($articles == null) echo '<h1 class="light-gray main-heading">Здесь пока ничего нет...</h1>';
+					if ($articles == null) echo '<h1 class="light-gray main-heading unselectable">Здесь пока ничего нет...</h1>';
 					else
 					{
 						foreach($articles as $article)
 						{
-							$owner_name = R::findOne('users', 'id = ?', array($article['owner_id']))->login;
-							$owner_name = $owner_name == null ? 'UNKNOWN' : $owner_name;
+							$owner = R::findOne('users', 'id = ?', array($article['owner_id']));
 
 							echo '<article class="single-announcement shadow">
 								<a class="image-announcement scale-effect" href="/ContentPages/article.php?id=' . $article['id'] . '">
-									<img src="' . $article['icon'] . '" title="Название статьи" alt="Название статьи"/>
+									<img src="' . $article['icon'] . '" title="' . $article['subject'] . ': ' . $article['title'] . '" alt="' . $article['subject'] . ': ' . $article['title'] . '"/>
 								</a>
 								<section class="content-announcement">
-									<a class="title-announcement" href="/ContentPages/article.php?id=' . $article['id'] . '"><h2>' . $article['subject'] . ': ' . $article['title'] . '</h2></a><p>' . $article['description'] . '</p>
+									<a class="title-announcement" href="/ContentPages/article.php?id=' . $article['id'] . '"><h2 class="dark-gray">' . $article['subject'] . ': ' . $article['title'] . '</h2></a><p class="dark-gray">' . $article['description'] . '</p>
 									<div class="author-date-wrap">
-										<span class = "statistics-element"><a href="#"><i class="fa fa-user" aria-hidden="true"></i> ' . $owner_name . '</a></span>
+										<span class = "statistics-element"><a href="/UserPages/profile.php?id=' . $article->owner_id . '" title="Создатель статьи"><i class="fa fa-user" aria-hidden="true"></i> ' . Data::get_userName($owner) . '</a></span>
 										<span class = "statistics-element"><i class="fa fa-pen-nib" aria-hidden="true"></i> ' . $article['date'] . '</span>
 									</div>
 									<div class="views-comments-wrap">
-										<span class = "statistics-element"><i class="fa fa-eye" aria-hidden="true"></i> ' . $article['views'] . '</span>
-										<span class = "statistics-element"><i class="fa fa-comments" aria-hidden="true"></i> ' . $article['comments'] . '</span>
+										<span class = "statistics-element"><i class="fa fa-eye" aria-hidden="true"></i> ' . number_format(intval($article['views']), 0, ' ', ' ') . '</span>
+										<span class = "statistics-element"><i class="fa fa-comments" aria-hidden="true"></i> ' . $article['comments_count'] . '</span>
 									</div>
 								</section>
-								<span class="frame-text">NEW</span>
+								' . ((time() - strtotime($article['date'])) / 86400 > 7 ? '' : '<span class="frame-text">NEW</span>' ) . '
 							</article>';
 						}
 					}
 				 ?>
 			</div>
-			<div id="sidebar-wrapper">
-				<a class="out-button shadow purple-button-effect" href="https://vk.com/ruslan.itpro" target="_blank">Паблик <i class="fa fa-vk"></i></a>
-				<div class="out-button shadow" href="#">Топ статьи <i class="fa fa-fire-alt"></i></div>
-				<ul id="top-list">
-					<li><a class="top-page" href="#"><i class="fa fa-fire-alt"></i> Введение в PHP <i class="fa fa-eye" aria-hidden="true"></i> 12</a></li>
-					<li><a class="top-page" href="#"><i class="fa fa-fire-alt"></i> Введение в CSS <i class="fa fa-eye" aria-hidden="true"></i> 7</a></li>
-					<li><a class="top-page" href="#"><i class="fa fa-fire-alt"></i> Ссылки в HTML <i class="fa fa-eye" aria-hidden="true"></i> 6</a></li>
-				</ul>
-			</div>
+			<?php require_once($_SERVER['DOCUMENT_ROOT'] . '/ServerUtils/topArticles.php'); ?>
 		</div>
 	</div>
 	<?php require_once($_SERVER['DOCUMENT_ROOT'] . '/ServerUtils/footer.php'); ?>

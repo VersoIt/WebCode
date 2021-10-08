@@ -1,5 +1,6 @@
 <?php
 	require_once($_SERVER['DOCUMENT_ROOT'] . '/ServerUtils/dataBase.php');
+	require_once($_SERVER['DOCUMENT_ROOT'] . '/ServerUtils/dataSendler.php');
 
 	echo '<footer class="wrapper dark-top-border">
 		<div class="container">
@@ -20,8 +21,7 @@
 	if (isset($_SESSION['logged_user']))
 	{
 		$user = R::findOne('users', 'login = ?', array($_SESSION['logged_user']->login));
-		if ($user) echo '<a class="light-gray underline-effect" href="#"><p>' . $user->login . '</p></a>';
-		else echo '<a class="light-gray underline-effect" href="#" title="Ваш аккаунт удалён из-за нарушений правил сообщества."><p>DELETED</p></a>';
+		echo '<a class="light-gray underline-effect" href="#"><p>' . Data::get_userName($user) . '</p></a>';
 		echo '<a class="light-gray underline-effect" href="/ServerUtils/logOut.php"><p>Выйти</p></a>';
 	}
 	else

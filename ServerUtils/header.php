@@ -1,5 +1,12 @@
 <?php
 	require_once($_SERVER['DOCUMENT_ROOT'] . '/ServerUtils/dataBase.php');
+	require_once($_SERVER['DOCUMENT_ROOT'] . '/ServerUtils/dataSendler.php');
+
+	setlocale(LC_ALL, 'ru_RU', 'ru_RU.UTF-8', 'ru', 'russian');
+	date_default_timezone_set('UTC');
+
+	$logged_user = R::findOne('users', 'id = ?', array($_SESSION['logged_user']->id));
+	if ($logged_user) R::exec('UPDATE `users` SET `last_online`=NOW() WHERE `id` = ' . $logged_user->id);
 
 	echo '<header class="wrapper dark-botton-border">
 		<div class="container">
@@ -7,21 +14,19 @@
 				<a href="/index.php"><img src="/Logo/name.png" title="WebCode" alt="WebCode"/></a>
 			</div>
 			<nav class="menu">
-				<ul>
+				<ol>
 					<a class="title-link opacity-effect" href="#">HTML</li></a>
 					<a class="title-link opacity-effect" href="#">PHP</li></a>
 					<a class="title-link opacity-effect" href="#">CSS</li></a>
-				</ul>
+				</ol>
 			</nav>
 			<div id="auth">';
 
 			if (isset($_SESSION['logged_user']))
 			{
-				$user = R::findOne('users', 'login = ?', array($_SESSION['logged_user']->login));
-				if($user) echo '<a class="red-button purple-button-effect" style="float:left" href="#">' . $user->login . '</a>';
-				else echo '<a class="red-button purple-button-effect" style="float:left" href="#" title="Ваш аккаунт удалён из-за нарушений правил сообщества.">DELETED</a>';
-				echo ' <a class="dark-button opacity-effect" style="float:right" href="/ServerUtils/logOut.php">ВЫЙТИ</a>';
-				if ($user->is_admin) echo '<a class="red-button purple-button-effect" style="float:left" href="/Admin/articleEditor.php">Создать статью</a>';
+				echo '<a class="red-button purple-button-effect" style="float:left" href="/UserPages/profile.php?id=' . $logged_user->id . '">' . Data::get_userName($logged_user) . '</a>
+				<a class="dark-button opacity-effect" style="float:right" href="/ServerUtils/logOut.php">ВЫЙТИ</a>';
+				if ($logged_user->is_admin) echo '<a class="red-button purple-button-effect" style="float:left" href="/Admin/articleEditor.php">Создать статью</a>';
 			}
 			else
 			{

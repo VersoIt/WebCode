@@ -20,7 +20,7 @@
 		<span>Авторизация на сайте</span>
 	</div>
 	<div id="global-container">
-		<div id="auth-wrapper">
+		<div id="middle-wrapper">
 			<?php if (!isset($_SESSION['logged_user'])): ?>
 			<div id="auth-container">
 				<form action="logIn.php" method="POST">

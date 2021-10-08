@@ -42,15 +42,7 @@
 				<p class="info-text"><i class="far fa-envelope fa-lg light-red"></i> <a class="light-red underline-effect" href="mailto:ruslan.itpro@gmail.com" target="_blank">ruslan.itpro@gmail.com</a></p>
 				<p class="info-text"><i class="fab fa-vk fa-lg fa-lg light-red"></i> <a class="light-red underline-effect" href="https://vk.com/ruslan.itpro" target="_blank">Руслан Лященко</a></p>
 			</div>
-			<div id="sidebar-wrapper">
-				<a class="out-button shadow purple-button-effect" href="https://vk.com/ruslan.itpro" target="_blank">Паблик <i class="fa fa-vk"></i></a>
-				<div class="out-button shadow" href="#">Топ статьи <i class="fa fa-fire-alt"></i></div>
-				<ul id="top-list">
-					<li><a class="top-page" href="#"><i class="fa fa-fire-alt"></i> Введение в PHP <i class="fa fa-eye" aria-hidden="true"></i> 12</a></li>
-					<li><a class="top-page" href="#"><i class="fa fa-fire-alt"></i> Введение в CSS <i class="fa fa-eye" aria-hidden="true"></i> 7</a></li>
-					<li><a class="top-page" href="#"><i class="fa fa-fire-alt"></i> Ссылки в HTML <i class="fa fa-eye" aria-hidden="true"></i> 6</a></li>
-				</ul>
-			</div>
+			<?php require_once($_SERVER['DOCUMENT_ROOT'] . '/ServerUtils/topArticles.php'); ?>
 		</div>
 	</div>
 	<?php require_once($_SERVER['DOCUMENT_ROOT'] . '/ServerUtils/footer.php'); ?>
