@@ -20,8 +20,8 @@
 				<p class="heading-footer">Аккаунт</p>';
 	if (isset($_SESSION['logged_user']))
 	{
-		$user = R::findOne('users', 'login = ?', array($_SESSION['logged_user']->login));
-		echo '<a class="light-gray underline-effect" href="#"><p>' . Data::get_userName($user) . '</p></a>';
+		$user = R::findOne('users', 'id = ?', array($_SESSION['logged_user']));
+		echo '<a class="light-gray underline-effect" href="/UserPages/profile.php?id=' . $logged_user->id . '"><p>' . htmlspecialchars(Data::get_userName($user)) . '</p></a>';
 		echo '<a class="light-gray underline-effect" href="/ServerUtils/logOut.php"><p>Выйти</p></a>';
 	}
 	else
@@ -32,7 +32,7 @@
 
 	echo '</div>
 		</div>
-		<div>
+		<div class="social-links">
 			<a href="https://vk.com/ruslan.itpro" target="_blank" title="VK"><i class="fab fa-vk social-button"></i></a>
 			<a href="#" target="_blank" title="Facebook"><i class="fab fa-facebook social-button"></i></a>
 			<a href="#" target="_blank" title="YouTube"><i class="fab fa-youtube social-button"></i></a>

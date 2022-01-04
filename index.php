@@ -7,6 +7,7 @@
 	<meta name="author" content="Ruslan Lyaschenko"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 	<link rel="stylesheet" type="text/css" href="Styles/defaultStyle.css"/>
+	<link rel="stylesheet" type="text/css" href="Styles/adaptive.css"/>
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet">
@@ -32,7 +33,7 @@
 						foreach($articles as $article)
 						{
 							$owner = R::findOne('users', 'id = ?', array($article['owner_id']));
-							if ((time() - strtotime($article['date'])) / 86400 < 7)
+							if ((time() - strtotime($article['date'])) / 604800 < 7)
 							{
 								$not_exists = false;
 								echo '<article class="single-announcement shadow">
@@ -40,7 +41,7 @@
 									<img src="' . $article['icon'] . '" title="' . $article['subject'] . ': ' . $article['title'] . '" alt="' . $article['subject'] . ': ' . $article['title'] . '"/>
 								</a>
 								<section class="content-announcement">
-									<a class="title-announcement" href="/ContentPages/article.php?id=' . $article['id'] . '"><h2 class="dark-gray">' . $article['subject'] . ': ' . $article['title'] . '</h2></a><p class="dark-gray">' . $article['description'] . '</p>
+									<a class="title-announcement" href="/ContentPages/article.php?id=' . $article['id'] . '"><h2 class="dark-gray">' . $article['subject'] . ': ' . $article['title'] . '</h2></a><p class="dark-gray text-overflow">' . $article['description'] . '</p>
 									<div class="author-date-wrap">
 										<span class = "statistics-element"><a href="/UserPages/profile.php?id=' . $article['owner_id'] . '"><i class="fa fa-user" aria-hidden="true"></i> ' . Data::get_userName($owner) . '</a></span>
 										<span class = "statistics-element"><i class="fa fa-pen-nib" aria-hidden="true"></i> ' . $article['date'] . '</span>

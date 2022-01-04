@@ -11,6 +11,7 @@
 	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet"/>
 	<link rel="shortcut icon" type="image/x-icon" href="../Logo/icon.ico"/>
 	<script src="https://kit.fontawesome.com/28c4ac0753.js" crossorigin="anonymous"></script>
+	<link rel="stylesheet" type="text/css" href="../Styles/adaptive.css"/>
 	<title>WebCode | О проекте/Контакты</title>
 </head>
 <body>
@@ -28,6 +29,7 @@
 		<div id="inline-global-container">
 			<div id="content-wrapper">
 				<h1>О проекте/Контакты</h1>
+				<p class="logo" style="text-align: center; max-width:450px;"><img src="/Logo/icon.png" title="WebCode" alt="WebCode" style="width:100%"/></p>
 				<p><strong><a class="light-red underline-effect" href="../index.php">WebCode.com</a></strong> — это онлайн-ресурс о web-программировании для начинающих и более продвинутых пользователей.</p>
 				<p class="info-text"><i class="fas fa-rocket fa-lg light-red"></i> Запущен в 2021 году.</p>
 				<p class="info-text"><i class="fab fa-earlybirds fa-lg light-red"></i> Цель: Сделать ресурс, на котором человек, изучая уроки, с нуля сможет создать web-сайт.</p>

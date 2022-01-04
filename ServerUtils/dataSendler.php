@@ -19,7 +19,7 @@
 		
 			R::store($user);
 
-			$_SESSION['logged_user'] = $user;
+			$_SESSION['logged_user'] = $user->id;
 			header('Location: /');
 		}
 
@@ -32,10 +32,21 @@
 			$article->subject = strtoupper($data['subject']);
 			$article->description = $data['description'];
 			$article->date = date('d M Y H:i');
-			$article->owner_id = $_SESSION['logged_user']->id;
+			$article->owner_id = $_SESSION['logged_user'];
 
 			Data::sendIcon($article, '/Images/Articles/');
 			R::store($article);
+		}
+
+		public static function send_password_recover($first_password, $second_password)
+		{
+			if (trim($first_password) != '' and trim($second_password) != '')
+			{
+				if ($first_password == $second_password)
+				{
+					$user = R::dispense('users');
+				}
+			}
 		}
 
 		public static function sendIcon(&$bean, $folder)
@@ -60,7 +71,13 @@
 		public static function get_userName($user)
 		{
 			if (!$user) return 'DELETED';
-			else return $user->login;
+			else return htmlspecialchars($user->login);
+		}
+
+		public static function get_userIcon($user)
+		{
+			if (!$user) return '/Images/Users/notFound.png';
+			else return $user->icon;
 		}
 
 	}

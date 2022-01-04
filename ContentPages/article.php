@@ -3,7 +3,7 @@
 	require_once($_SERVER['DOCUMENT_ROOT'] . '/ServerUtils/dataBase.php');
 	$article = R::findOne('articles', 'id = ?', array($data['id']));
 	if ($article != null) R::exec('UPDATE `articles` SET `views` = `views` + 1 WHERE `id` = ' . $data[id]);
-	$current_user = R::findOne('users', 'id = ?', array($_SESSION['logged_user']->id));
+	$current_user = R::findOne('users', 'id = ?', array($_SESSION['logged_user']));
 ?>
 
 <!DOCTYPE html>
@@ -25,7 +25,9 @@
 	<script src="https://kit.fontawesome.com/28c4ac0753.js" crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
 	<title>WebCode | <?php echo $article != null ? $article['subject'] . ': ' . $article['title'] : 'Страница не найдена!'?></title>
+	<link rel="stylesheet" media="screen,projection" href="/Styles/ui.totop.css" />
 	<script src="/ClientScripts/contentHeading.js"></script>
+	<link rel="stylesheet" type="text/css" href="../Styles/adaptive.css"/>
 </head>
 <body>
 	<?php require_once($_SERVER['DOCUMENT_ROOT'] . '/ServerUtils/header.php'); ?>
@@ -33,7 +35,7 @@
 		if(isset($_POST['send_comment']))
 		{
 			$data = $_POST;
-			$data['owner_id'] = $_SESSION['logged_user']->id;
+			$data['owner_id'] = $_SESSION['logged_user'];
 			$data['article_id'] = $article['id'];
 
 			R::exec('UPDATE `articles` SET `comments_count` = `comments_count` + 1 WHERE `id` = ' . $article['id']);
@@ -42,7 +44,6 @@
 			header('Location: ' . $_SERVER['PHP_SELF'] . '?id=' . $article['id']);
 		}
 	?>
-
 	<div id="global-container">
 		<?php if($article != null): ?>
 		<div id="inline-global-container">
@@ -64,11 +65,11 @@
 				<?php if($current_user): ?>
 				<form action="<?php echo $_SERVER['PHP_SELF'] . '?id=' . $article['id'];?>" class="comment-input-container" method="POST">
 					<div class="avatar main-image">
-						<img src="<?php echo $current_user->icon ?>" title="<?php $current_user->login ?>" alt="<?php echo $current_user->login ?>"/>
+						<img src="<?php echo $current_user->icon ?>" title="<?php htmlspecialchars($current_user->login) ?>" alt="<?php echo htmlspecialchars($current_user->login) ?>" srcset="<?php echo $current_user->icon ?>"/>
 					</div>
 					<div id="comment-input-wrapper">
 						<div style="position: relative; display: inline-block; width:80%;" >
-							<input type="text" id="comment-input" placeholder="Оставьте комментарий" name="content" autocomplete="off" maxlength="2048"/>
+							<input type="text" id="comment-input" placeholder="Оставьте комментарий" name="content" autocomplete="off" maxlength="1024"/>
 							<span class="focus-border"></span>
 						</div>
 						<div id="input-field">
@@ -77,7 +78,7 @@
 					</div>
 				</form>
 				<?php else: ?>
-					<p class="light-gray main-heading unselectable"><i class="fa fa-sign-in" aria-hidden="true"></i> Только полноправные пользователи могут оставлять комментарии. Пожалуйста, <a href="/UserPages/logIn.php" class="light-red">войдите</a> в аккаунт.</p>
+					<p class="light-gray main-heading unselectable"><i class="fa fa-sign-in" aria-hidden="true"></i> Только полноправные пользователи могут оставлять комментарии. Пожалуйста, <a href="/UserPages/logIn.php" class="light-red underline-effect">войдите</a> в аккаунт.</p>
 				<?php endif; ?>
 				<div id="comments">
 
@@ -93,14 +94,21 @@
 							{
 								$owner = R::findOne('users', 'id = ?', array($comment['owner_id']));
 								echo '<div class="comment">
+										<div class="owner-info">
 										<div class="avatar comment-image">
-											<a href="/UserPages/profile.php?id=' . $article['owner_id'] . '"><img src="' . $owner->icon . '" alt="' . $owner->login . '" title="' . $owner->login . '"/></a>
+											<a href="/UserPages/profile.php?id=' . $owner->id . '"><img src="' . Data::get_userIcon($owner) . '" alt="' . Data::get_userName($owner) . '" title="' . Data::get_userName($owner) . '" loading="lazy"/></a>
 										</div>
-										<span class="trigger"><i class="fas fa-angle-double-down"></i></span>
-										<a href="/UserPages/profile.php?id=' . $article['owner_id'] . '" class="owner underline-effect">' . $owner->login . '</a>
-										<span class="light-gray">' . $comment['date'] . '</span>
-										<p class="comment-content">' . $comment['content'] . '</p>
+										<div style="flex-direction:column; justify-content: space-around;">
+										<div>
+										<a href="/UserPages/profile.php?id=' . $owner->id . '" class="owner underline-effect">';
+										echo Data::get_userName($owner) . '</a>';
+										if ($owner->is_admin) echo '<span class="moderator">Модератор</span>';
+										echo '</div><span class="light-gray">' . $comment['date'] . '</span>
+										</div>
+										</div>
+										<p class="comment-content">' . htmlspecialchars($comment['content']) . '</p>
 										<span class="comment-count light-gray">#' . $count . '</span>
+										<span class="trigger"><i class="fas fa-thumbs-up"></i></span>
 						    			</div>';
 						    	++$count;
 							}
@@ -118,11 +126,23 @@
 					<img src="/Images/notFound.jpg" title="Страница не найдена!" alt="Страница не найдена!"/>
 				</div>
 				<span id="error-id" class="light-red">Ошибка 404</span>
-				<p id="error-description">Кажется, что-то пошло не так! Страница, которую вы запрашиваете, не существует. Возможно она устарела, была удалена, или был введён неверный адрес в адресной строке.</p>
+				<p id="error-description">Кажется, что-то пошло не так! Статья, которую вы запрашиваете, не существует. Возможно она устарела, была удалена, или был введён неверный адрес в адресной строке.</p>
 			</div>
 		</div>
 <?php endif ?>
 	</div>
-<script src="../ClientScripts/commentSendler.js"></script>
+	<script src="../ClientScripts/commentSendler.js"></script>
 <?php require_once($_SERVER['DOCUMENT_ROOT'] . '/ServerUtils/footer.php'); ?>
+
+	<script src="/ClientScripts/easing.js" type="text/javascript"></script>
+	<script src="/ClientScripts/jquery.ui.totop.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		$(document).ready(function() 
+		{
+ 
+			$().UItoTop({ easingType: 'easeOutQuart' });
+ 
+		});
+	</script>
+
 </body>

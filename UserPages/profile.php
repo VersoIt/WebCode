@@ -22,6 +22,7 @@
 	<script src="https://kit.fontawesome.com/28c4ac0753.js" crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
 	<script src="/ClientScripts/imageLoader.js"></script>
+	<link rel="stylesheet" type="text/css" href="../Styles/adaptive.css"/>
 	<title>WebCode | <?php echo Data::get_userName($user); ?> </title>
 </head>
 <body>
@@ -34,27 +35,29 @@
 			<div id="profile">
 				<div class="floating-head dark-gray unselectable">Профиль</div>
 				<div id="user-name">
-					<span class="heading-title user-name"><span class="dark-gray">
-						<?php 
-							if($user['id'] == $_SESSION['logged_user']->id) echo 'Ваш логин: ';
-							else echo 'Логин: '; ?>
-							</span><span class="light-red">
-						<?php echo Data::get_userName($user); ?>
+					<span>
+						<span class="dark-gray">
+							<?php 
+								if(($user['id'] == $_SESSION['logged_user']) && ($user != null)) echo 'Ваш логин: ';
+								else echo 'Логин: '; ?>
+								</span><span class="light-red text-overflow" style="max-width: 800px;width:100%;">
+							<?php echo Data::get_userName($user); ?>
 						</span>
 					</span>
 				</div>
 				<div class="user-components">
 					<div id="avatar">
-						<img src="<?php echo $user->icon; ?>" title="<?php echo Data::get_userName($user); ?>" alt="<?php echo Data::get_userName($user) ?>"/>
+						<img src="<?php echo Data::get_userIcon($user); ?>" title="<?php echo Data::get_userName($user); ?>" alt="<?php echo Data::get_userName($user) ?>"/>
 					</div>
-					<?php if($user['id'] == $_SESSION['logged_user']->id): ?>
-						<form id="auth-container" style="width:100%" action="<?php echo '/ServerUtils/avatarSendler.php'; ?>" method="POST" enctype="multipart/form-data">
+					<?php if(($user['id'] == $_SESSION['logged_user']) && ($user['id'] != null)): ?>
+						<form class="auth-container" style="width:100%" action="<?php echo '/ServerUtils/avatarSendler.php'; ?>" method="POST" enctype="multipart/form-data">
 							<label for="file-upload" id="bntUpload" class="red-button purple-button-effect pointer"><i class="fa fa-cloud-upload"></i> Загрузить аватар</label>
 							<input id="input_file" type="file" accept="image/x-png,image/gif,image/jpeg" name="icon" onchange="this.form.submit();"/>
-							<span id="selected_filename" class="light-gray unselectable">Файл не выбран</span>
+							<span id="selected_filename" class="light-gray unselectable">Выберите файл</span>
 						</form>
 					<?php endif; ?>
 					<?php if($user): ?>
+					<?php if ($user->is_admin) echo '<span class="moderator">Модератор</span>'; ?>
 					<div id="statistics">
 						<p>Рейтинг: (В разработке)</p>
 						<p>Всего комментариев: <?php echo sizeof($comments) ?> </p>

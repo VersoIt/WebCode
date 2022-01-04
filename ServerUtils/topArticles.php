@@ -14,7 +14,7 @@
 		foreach($articles as $article)
 		{
 			if ($article['views'] > 0)
-				echo '<li><a class="top-page" href="/ContentPages/article.php?id=' . $article['id'] . '"><i class="fa fa-fire-alt"></i> ' . $article['subject'] . ': ' . $article['title'] . ' <i class="fa fa-eye light-gray" aria-hidden="true"></i><span class="light-gray"> ' . number_format(intval($article['views']), 0, ' ', ' ') . '</span></a></li>';
+				echo '<li><a class="top-page" href="/ContentPages/article.php?id=' . $article['id'] . '"><i class="fa fa-fire-alt"></i> ' . htmlspecialchars($article['subject']) . ': ' . htmlspecialchars($article['title']) . ' <i class="fa fa-eye light-gray" aria-hidden="true"></i><span class="light-gray"> ' . number_format(intval($article['views']), 0, ' ', ' ') . '</span></a></li>';
 		}
 		echo'</ul>
 			</div>';

@@ -1,11 +1,12 @@
-#auth-container
+.auth-container
 {
 	display: flex;
 	align-items: center;
 	flex-direction: column;
-	justify-content: center;
-	width: 612px;
+	justify-content: space-evenly;
+	max-width: 612px;
 	text-align: center;
+	position: relative;
 }
 
 button
@@ -13,9 +14,17 @@ button
 	border: none;
 }
 
+.forgot-password
+{
+	position: absolute;
+	right: 35px;
+	bottom: 65px;
+}
+
 .auth-input
 {
-	width: 502px;
+	width: 80%;
+	max-width: 502px;
 	height: 67px;
 	border-radius: 12px;
 	margin: 20px 0px;
@@ -28,6 +37,13 @@ button
 {
 	outline: none;
 	border-color: #e06149;
+}
+
+.flying-button
+{
+	position: absolute;
+	right: 34px;
+	top: 350px;
 }
 
 .auth-button
